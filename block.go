@@ -1208,9 +1208,9 @@ func (p *Markdown) listItem(data []byte, flags *ListType) int {
 	// keep track of the indentation of the first line
 	itemIndent := 0
 	if data[0] == '\t' {
-		itemIndent += 4
+		itemIndent += 2
 	} else {
-		for itemIndent < 3 && data[itemIndent] == ' ' {
+		for itemIndent < 1 && data[itemIndent] == ' ' {
 			itemIndent++
 		}
 	}
@@ -1283,9 +1283,9 @@ gatherlines:
 		indentIndex := 0
 		if data[line] == '\t' {
 			indentIndex++
-			indent += 4
+			indent += 2
 		} else {
-			for indent < 4 && line+indent < i && data[line+indent] == ' ' {
+			for indent < 2 && line+indent < i && data[line+indent] == ' ' {
 				indent++
 				indentIndex++
 			}
@@ -1347,16 +1347,16 @@ gatherlines:
 		case p.isPrefixHeading(chunk):
 			// if the heading is not indented, it is not nested in the list
 			// and thus ends the list
-			if containsBlankLine && indent < 4 {
+			if containsBlankLine && indent < 2 {
 				*flags |= ListItemEndOfList
 				break gatherlines
 			}
 			*flags |= ListItemContainsBlock
 
 		// anything following an empty line is only part
-		// of this item if it is indented 4 spaces
+		// of this item if it is indented 2 spaces
 		// (regardless of the indentation of the beginning of the item)
-		case containsBlankLine && indent < 4:
+		case containsBlankLine && indent < 2:
 			if *flags&ListTypeDefinition != 0 && i < len(data)-1 {
 				// is the next item still a part of this list?
 				next := i
